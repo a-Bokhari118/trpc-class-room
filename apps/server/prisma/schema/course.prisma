@@ -1,0 +1,37 @@
+enum CourseStatus {
+    DRAFT
+    PUBLISHED
+    ARCHIVED
+}
+
+enum CourseLevel {
+    BEGINNER
+    INTERMEDIATE
+    ADVANCED
+}
+
+model Course {
+    id               String       @id @default(uuid())
+    title            String
+    description      String
+    fileKey          String
+    price            Int
+    duration         Int
+    level            CourseLevel  @default(BEGINNER)
+    smallDescription String
+    slug             String       @unique
+    status           CourseStatus @default(DRAFT)
+    category         String
+    userId           String
+    user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    chapters    Chapter[]
+    enrollments Enrollment[]
+
+    stripePriceId String @unique
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    @@map("course")
+}

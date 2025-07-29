@@ -29,12 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <Providers>
-          <div className="grid grid-rows-[auto_1fr] h-svh">
-            <Header />
-            {children}
-          </div>
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
