@@ -32,6 +32,7 @@ import {
   FileText,
   Grip,
   GripVertical,
+  Loader2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -57,6 +58,12 @@ export const CourseStructure = ({
 }: {
   data: AdminSingleCourseOutput;
 }) => {
+  const [reorderingLessonId, setReorderingLessonId] = useState<string | null>(
+    null
+  );
+  const [reorderingChapterId, setReorderingChapterId] = useState<string | null>(
+    null
+  );
   const { mutate: reorderChapters } = useMutation(
     trpc.chapter.reorderChapters.mutationOptions({
       onSuccess: () => {
@@ -65,6 +72,9 @@ export const CourseStructure = ({
             courseId: data.id,
           }),
         });
+      },
+      onSettled: () => {
+        setReorderingChapterId(null);
       },
     })
   );
@@ -76,6 +86,9 @@ export const CourseStructure = ({
             courseId: data.id,
           }),
         });
+      },
+      onSettled: () => {
+        setReorderingLessonId(null);
       },
     })
   );
@@ -150,6 +163,7 @@ export const CourseStructure = ({
     const courseId = data.id;
 
     if (activeType === "chapter") {
+      setReorderingChapterId(activeId as string);
       let targetChapterId = null;
       if (overType === "chapter") {
         targetChapterId = overId;
@@ -246,6 +260,7 @@ export const CourseStructure = ({
       };
       const prevItems = [...items];
       setItems(newItems);
+      setReorderingLessonId(active.id as string);
 
       if (courseId) {
         const lessonsToUpdate = updatedLessonForState.map((lesson) => ({
@@ -329,7 +344,11 @@ export const CourseStructure = ({
                             className="cursor-grab "
                             {...listeners}
                           >
-                            <GripVertical className="size-4 " />
+                            {reorderingChapterId === item.id ? (
+                              <Loader2 className="size-4 animate-spin" />
+                            ) : (
+                              <GripVertical className="size-4 " />
+                            )}
                           </Button>
                           <CollapsibleTrigger asChild>
                             <Button
@@ -370,7 +389,11 @@ export const CourseStructure = ({
                                         size="icon"
                                         {...lessonListeners}
                                       >
-                                        <Grip className="size-4" />
+                                        {reorderingLessonId === lesson.id ? (
+                                          <Loader2 className="size-4 animate-spin" />
+                                        ) : (
+                                          <Grip className="size-4" />
+                                        )}
                                       </Button>
                                       <FileText className="size-4" />
                                       <Link
