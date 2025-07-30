@@ -238,4 +238,38 @@ export const lessonRouter = router({
         message: "Lesson deleted successfully",
       };
     }),
+
+  reorderLessons: protectedProcedure
+    .input(
+      z.object({
+        courseId: z.string(),
+        lessons: z.array(z.object({ id: z.string(), position: z.number() })),
+        chapterId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { lessons, chapterId } = input;
+      if (!lessons || lessons.length === 0) {
+        return {
+          status: "error",
+          message: "No lessons to reorder",
+        };
+      }
+      const update = lessons.map((lesson) =>
+        prisma.lesson.update({
+          where: {
+            id: lesson.id,
+            chapterId,
+          },
+          data: {
+            position: lesson.position,
+          },
+        })
+      );
+      await prisma.$transaction(update);
+      return {
+        status: "success",
+        message: "Lessons reordered successfully",
+      };
+    }),
 });

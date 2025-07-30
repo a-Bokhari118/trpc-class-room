@@ -22,3 +22,4 @@ export declare const lessonSchema: z.ZodObject<{
     videoKey?: string | undefined;
 }>;
 export type LessonSchemaType = z.infer<typeof lessonSchema>;
+//# sourceMappingURL=lesson.d.ts.map

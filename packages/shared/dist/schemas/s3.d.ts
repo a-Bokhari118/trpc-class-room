@@ -24,3 +24,4 @@ export declare const s3DeleteSchema: z.ZodObject<{
 }>;
 export type FileUploadSchema = z.infer<typeof fileUploadSchema>;
 export type S3DeleteSchema = z.infer<typeof s3DeleteSchema>;
+//# sourceMappingURL=s3.d.ts.map

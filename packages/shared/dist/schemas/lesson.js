@@ -10,3 +10,4 @@ exports.lessonSchema = zod_1.z.object({
     thumbnailKey: zod_1.z.string().optional(),
     videoKey: zod_1.z.string().optional(),
 });
+//# sourceMappingURL=lesson.js.map

@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { ArrowLeftIcon, Brain, Save } from "lucide-react";
 import Link from "next/link";
-import { Categories, courseSchema, type CourseSchemaType } from "shared";
+import { Categories, courseSchema, type CourseSchemaType } from "@repo/shared";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
@@ -30,7 +30,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { courseLevelSchema, courseStatusSchema } from "shared";
+import { courseLevelSchema, courseStatusSchema } from "@repo/shared";
 import RichTextEditor from "@/components/rich-text-editor/editor";
 import { Uploader } from "@/components/file-uploader/uploader";
 import { toast } from "sonner";

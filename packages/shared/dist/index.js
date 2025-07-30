@@ -18,3 +18,4 @@ __exportStar(require("./schemas/course"), exports);
 __exportStar(require("./schemas/chapter"), exports);
 __exportStar(require("./schemas/lesson"), exports);
 __exportStar(require("./schemas/s3"), exports);
+//# sourceMappingURL=index.js.map

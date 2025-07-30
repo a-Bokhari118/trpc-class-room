@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 import prisma from "../../prisma";
 import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
-import { courseSchema } from "@repo/shared";
+import { courseSchema, editCourseSchema } from "@repo/shared";
 
 export const courseRouter = router({
   getAll: publicProcedure.query(async () => {
@@ -294,9 +294,10 @@ export const courseRouter = router({
     }),
 
   edit: protectedProcedure
-    .input(z.object({ courseId: z.string(), data: courseSchema }))
+    .input(editCourseSchema)
     .mutation(async ({ input, ctx }) => {
       const user = ctx.session.user;
+      console.log(input);
       const validatedInput = courseSchema.safeParse(input.data);
       if (!validatedInput.success) {
         throw new TRPCError({
@@ -304,21 +305,28 @@ export const courseRouter = router({
           message: validatedInput.error.message,
         });
       }
-
-      await prisma.course.update({
-        where: {
-          id: input.courseId,
-        },
-        data: {
-          ...validatedInput.data,
-          price: Number(validatedInput.data.price),
-          duration: Number(validatedInput.data.duration),
-        },
-      });
-      return {
-        status: "success",
-        message: "Course updated successfully",
-      };
+      try {
+        await prisma.course.update({
+          where: {
+            id: input.courseId,
+          },
+          data: {
+            ...validatedInput.data,
+            price: Number(validatedInput.data.price),
+            duration: Number(validatedInput.data.duration),
+          },
+        });
+        return {
+          status: "success",
+          message: "Course updated successfully",
+        };
+      } catch (error) {
+        console.log(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to update course",
+        });
+      }
     }),
 
   delete: protectedProcedure

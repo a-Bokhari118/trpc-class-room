@@ -11,3 +11,4 @@ exports.fileUploadSchema = zod_1.z.object({
 exports.s3DeleteSchema = zod_1.z.object({
     key: zod_1.z.string().min(1, { message: "Key is required" }),
 });
+//# sourceMappingURL=s3.js.map

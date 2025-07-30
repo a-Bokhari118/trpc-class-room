@@ -1,6 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
-import { AdminCourseType } from "@/app/data/admin/admin-get-courses";
 import { useConstructUrl } from "@/hooks/use-construct-url";
 import Link from "next/link";
 import {
@@ -21,8 +20,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { AdminCoursesOutput } from "@/utils/server-types";
 
-const AdminCourseCard = ({ course }: { course: AdminCourseType }) => {
+const AdminCourseCard = ({
+  course,
+}: {
+  course: AdminCoursesOutput[number];
+}) => {
   const url = useConstructUrl(course.fileKey);
   console.log(url);
   return (

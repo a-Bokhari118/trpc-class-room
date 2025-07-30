@@ -10,3 +10,4 @@ export declare const chapterSchema: z.ZodObject<{
     courseId: string;
 }>;
 export type ChapterSchemaType = z.infer<typeof chapterSchema>;
+//# sourceMappingURL=chapter.d.ts.map

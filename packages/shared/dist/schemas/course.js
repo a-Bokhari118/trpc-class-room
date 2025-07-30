@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.courseLevelSchema = exports.courseStatusSchema = exports.courseSchema = exports.Categories = void 0;
+exports.courseLevelSchema = exports.courseStatusSchema = exports.editCourseSchema = exports.courseSchema = exports.Categories = void 0;
 const zod_1 = require("zod");
 exports.Categories = [
     "Web Development",
@@ -50,5 +50,10 @@ exports.courseSchema = zod_1.z.object({
         message: "Status is required",
     }),
 });
+exports.editCourseSchema = zod_1.z.object({
+    courseId: zod_1.z.string(),
+    data: exports.courseSchema,
+});
 exports.courseStatusSchema = ["DRAFT", "PUBLISHED", "ARCHIVED"];
 exports.courseLevelSchema = ["BEGINNER", "INTERMEDIATE", "ADVANCED"];
+//# sourceMappingURL=course.js.map

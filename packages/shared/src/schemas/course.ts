@@ -49,6 +49,10 @@ export const courseSchema = z.object({
     message: "Status is required",
   }),
 });
+export const editCourseSchema = z.object({
+  courseId: z.string(),
+  data: courseSchema,
+});
 
 export type CourseSchemaType = z.infer<typeof courseSchema>;
 
