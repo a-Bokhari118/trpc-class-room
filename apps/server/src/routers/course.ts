@@ -1,9 +1,8 @@
-import { TRPCError, type inferProcedureOutput } from "@trpc/server";
+import { TRPCError } from "@trpc/server";
 import z from "zod";
 import prisma from "../../prisma";
 import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
-import { courseSchema } from "@my-better-t-app/shared";
-import type { AppRouter } from ".";
+import { courseSchema } from "@repo/shared";
 
 export const courseRouter = router({
   getAll: publicProcedure.query(async () => {

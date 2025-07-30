@@ -1,8 +1,8 @@
 import { TRPCError } from "@trpc/server";
 import z from "zod";
 import prisma from "../../prisma";
-import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
-import { lessonSchema } from "@my-better-t-app/shared";
+import { protectedProcedure, router } from "../lib/trpc";
+import { lessonSchema } from "@repo/shared";
 
 export const lessonRouter = router({
   getLessonContent: protectedProcedure

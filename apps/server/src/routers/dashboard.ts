@@ -1,7 +1,5 @@
-import { TRPCError } from "@trpc/server";
-import z from "zod";
 import prisma from "../../prisma";
-import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
+import { protectedProcedure, router } from "../lib/trpc";
 
 export const dashboardRouter = router({
   getEnrollmentsStats: protectedProcedure.query(async () => {

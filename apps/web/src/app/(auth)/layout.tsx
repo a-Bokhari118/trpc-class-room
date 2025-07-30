@@ -25,7 +25,7 @@ export default function AuthLayout({
           href="/"
           className="flex items-center gap-2 self-center font-medium transition duration-300 hover:scale-105 hover:rotate-x-180"
         >
-          <Image src={Logo} alt="NEXT LMS" width={100} height={100} />
+          <Image src={Logo} alt="ClassRoom" width={100} height={100} />
         </Link>
         {children}
         <div className="text-center text-sm text-muted-foreground">

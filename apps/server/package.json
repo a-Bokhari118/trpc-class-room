@@ -26,7 +26,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.1.0",
-    "shared": "workspace:*",
+    "@repo/shared": "workspace:*",
     "uuid": "^11.1.0",
     "zod": "^4.0.2"
   },

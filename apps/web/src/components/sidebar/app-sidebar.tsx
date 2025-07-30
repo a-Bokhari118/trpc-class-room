@@ -137,7 +137,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link href="/" className="flex items-center  gap-2">
                 <Image src={Logo} alt="logo" className="size-12" />
-                <span className="text-base font-semibold">NEXT LMS</span>
+                <span className="text-base font-semibold">ClassRoom</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -2,7 +2,7 @@ import { TRPCError } from "@trpc/server";
 import z from "zod";
 import prisma from "../../prisma";
 import { protectedProcedure, publicProcedure, router } from "../lib/trpc";
-import { chapterSchema } from "@my-better-t-app/shared";
+import { chapterSchema } from "@repo/shared";
 
 export const chapterRouter = router({
   getAll: publicProcedure.query(async () => {

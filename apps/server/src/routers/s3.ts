@@ -1,6 +1,6 @@
 import { TRPCError } from "@trpc/server";
 import { protectedProcedure, router } from "../lib/trpc";
-import { fileUploadSchema, s3DeleteSchema } from "shared";
+import { fileUploadSchema, s3DeleteSchema } from "@repo/shared";
 import { v4 as uuidv4 } from "uuid";
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";

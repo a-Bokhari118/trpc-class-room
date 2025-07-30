@@ -38,14 +38,18 @@ export default function CourseSlugPage({
     isPending,
     isError,
   } = useQuery(trpc.course.getSingleCourse.queryOptions({ slug }));
-  const isInrolled = useQuery(
+  const {
+    data: isEnrolled,
+    isPending: isEnrolledPending,
+    isError: isEnrolledError,
+  } = useQuery(
     trpc.course.getIsEnrolled.queryOptions({ courseId: course?.id || "" })
   );
-  if (isPending) {
+  if (isPending || isEnrolledPending) {
     return <CourseSlugSkeleton />;
   }
-  if (isError) {
-    return <div>Error loading course</div>;
+  if (isError || isEnrolledError) {
+    return <div>Error loading course or enrollment</div>;
   }
   const imageUrl = useConstructUrl(course?.fileKey || undefined);
 
@@ -232,7 +236,7 @@ export default function CourseSlugPage({
               </div>
 
               <div className="space-y-4">
-                {isInrolled ? (
+                {isEnrolled ? (
                   <Button className="w-full" size="lg" asChild>
                     <Link href={`/dashboard`}>View Course</Link>
                   </Button>
