@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
+import { useDeleteLesson } from "../../hooks/use-delete-lesson";
 
 export const DeleteLesson = ({
   lessonId,
@@ -27,23 +28,14 @@ export const DeleteLesson = ({
   courseId: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: deleteLesson, isPending } = useMutation(
-    trpc.lesson.delete.mutationOptions()
-  );
+  const { deleteLesson, isDeleting } = useDeleteLesson();
 
   const onSubmit = async () => {
-    deleteLesson(
-      { lessonId, chapterId, courseId },
-      {
-        onSuccess: () => {
-          toast.success("Lesson deleted successfully");
-          setIsOpen(false);
-        },
-        onError: () => {
-          toast.error("Failed to delete lesson");
-        },
-      }
-    );
+    deleteLesson(lessonId, chapterId, courseId, {
+      onSuccess: () => {
+        setIsOpen(false);
+      },
+    });
   };
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -70,9 +62,9 @@ export const DeleteLesson = ({
               variant="destructive"
               size="sm"
               onClick={onSubmit}
-              disabled={isPending}
+              disabled={isDeleting}
             >
-              {isPending ? (
+              {isDeleting ? (
                 <>
                   <Loader2 className="size-4 animate-spin" /> Deleting...
                 </>

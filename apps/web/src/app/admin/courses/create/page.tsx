@@ -37,12 +37,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { trpc } from "@/utils/trpc";
+import { useCreateCourse } from "../[courseId]/hooks/use-create-course";
 
 export default function CreateCoursePage() {
   const router = useRouter();
-  const { mutate: createCourse, isPending: isCreating } = useMutation(
-    trpc.course.create.mutationOptions()
-  );
+
+  const { createCourse, isCreating } = useCreateCourse();
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -62,12 +62,8 @@ export default function CreateCoursePage() {
   const onSubmit = (values: CourseSchemaType) => {
     createCourse(values, {
       onSuccess: () => {
-        toast.success("Course created successfully");
         form.reset();
         router.push("/admin/courses");
-      },
-      onError: () => {
-        toast.error("Unexpected error occurred");
       },
     });
   };

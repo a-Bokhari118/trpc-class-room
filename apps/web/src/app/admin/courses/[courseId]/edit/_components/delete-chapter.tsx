@@ -16,6 +16,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Loader2, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useDeleteChapter } from "../../hooks/use-delete-chapter";
 
 export const DeleteChapter = ({
   chapterId,
@@ -25,30 +26,13 @@ export const DeleteChapter = ({
   courseId: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: deleteChapter, isPending } = useMutation(
-    trpc.chapter.delete.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.course.getAdminSingleCourse.queryKey({
-            courseId,
-          }),
-        });
-      },
-    })
-  );
+  const { deleteChapter, isDeleting } = useDeleteChapter();
   const onSubmit = async () => {
-    deleteChapter(
-      { chapterId, courseId },
-      {
-        onSuccess: () => {
-          toast.success("Chapter deleted successfully");
-          setIsOpen(false);
-        },
-        onError: () => {
-          toast.error("Failed to delete chapter");
-        },
-      }
-    );
+    deleteChapter(chapterId, courseId, {
+      onSuccess: () => {
+        setIsOpen(false);
+      },
+    });
   };
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
@@ -71,9 +55,9 @@ export const DeleteChapter = ({
               variant="destructive"
               size="sm"
               onClick={onSubmit}
-              disabled={isPending}
+              disabled={isDeleting}
             >
-              {isPending ? (
+              {isDeleting ? (
                 <>
                   <Loader2 className="size-4 animate-spin" /> Deleting...
                 </>

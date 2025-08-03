@@ -25,18 +25,11 @@ import {
 import { courseLevelSchema, courseStatusSchema } from "@repo/shared";
 import RichTextEditor from "@/components/rich-text-editor/editor";
 import { Uploader } from "@/components/file-uploader/uploader";
-import { useTransition } from "react";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import type { AdminSingleCourseOutput } from "@/utils/server-types";
-import { queryClient, trpc } from "@/utils/trpc";
-import { useMutation } from "@tanstack/react-query";
+
+import { useEditCourse } from "../../hooks/use-edit-course";
 
 export const EditCourseForm = ({ data }: { data: AdminSingleCourseOutput }) => {
-  const { mutate: editCourse, isPending } = useMutation(
-    trpc.course.edit.mutationOptions()
-  );
-  const router = useRouter();
   const form = useForm<CourseSchemaType>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
@@ -52,28 +45,10 @@ export const EditCourseForm = ({ data }: { data: AdminSingleCourseOutput }) => {
       status: data.status,
     },
   });
+  const { editCourse, isPending } = useEditCourse(data.id);
+
   const onSubmit = (values: CourseSchemaType) => {
-    editCourse(
-      {
-        courseId: data.id,
-        data: values,
-      },
-      {
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: trpc.course.getAdminSingleCourse.queryKey({
-              courseId: data.id,
-            }),
-          });
-          toast.success("Course updated successfully");
-          form.reset();
-          router.push("/admin/courses");
-        },
-        onError: () => {
-          toast.error("Failed to update course");
-        },
-      }
-    );
+    editCourse(values);
   };
 
   return (

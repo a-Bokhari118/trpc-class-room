@@ -260,37 +260,36 @@ export const courseRouter = router({
   create: protectedProcedure
     .input(courseSchema)
     .mutation(async ({ input, ctx }) => {
-      const {
-        title,
-        smallDescription,
-        category,
-        duration,
-        level,
-        fileKey,
-        description,
-      } = input;
       const user = ctx.session.user;
       const validatedInput = courseSchema.safeParse(input);
-      if (!validatedInput.success) {
+      try {
+        if (!validatedInput.success) {
+          throw new TRPCError({
+            code: "BAD_REQUEST",
+            message: validatedInput.error.message,
+          });
+        }
+        const course = await prisma.course.create({
+          data: {
+            ...validatedInput.data,
+            userId: user.id,
+            stripePriceId: Math.random().toString(36).substring(2, 15),
+            price: Number(validatedInput.data.price),
+            duration: Number(validatedInput.data.duration),
+          },
+        });
+
+        return {
+          status: "success",
+          message: "Course created successfully",
+        };
+      } catch (error) {
+        console.log(error);
         throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: validatedInput.error.message,
+          code: "INTERNAL_SERVER_ERROR",
+          message: "Failed to create course",
         });
       }
-      const course = await prisma.course.create({
-        data: {
-          ...validatedInput.data,
-          userId: user.id,
-          stripePriceId: "price_1QZ002FZ0000000000000000",
-          price: Number(validatedInput.data.price),
-          duration: Number(validatedInput.data.duration),
-        },
-      });
-
-      return {
-        status: "success",
-        message: "Course created successfully",
-      };
     }),
 
   edit: protectedProcedure
