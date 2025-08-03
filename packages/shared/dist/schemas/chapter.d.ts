@@ -3,11 +3,11 @@ export declare const chapterSchema: z.ZodObject<{
     name: z.ZodString;
     courseId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     courseId: string;
+    name: string;
 }, {
-    name: string;
     courseId: string;
+    name: string;
 }>;
 export type ChapterSchemaType = z.infer<typeof chapterSchema>;
 //# sourceMappingURL=chapter.d.ts.map

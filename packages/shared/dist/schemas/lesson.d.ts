@@ -7,15 +7,15 @@ export declare const lessonSchema: z.ZodObject<{
     thumbnailKey: z.ZodOptional<z.ZodString>;
     videoKey: z.ZodOptional<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
-    name: string;
     courseId: string;
+    name: string;
     chapterId: string;
     description?: string | undefined;
     thumbnailKey?: string | undefined;
     videoKey?: string | undefined;
 }, {
-    name: string;
     courseId: string;
+    name: string;
     chapterId: string;
     description?: string | undefined;
     thumbnailKey?: string | undefined;
