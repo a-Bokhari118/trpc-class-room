@@ -26,20 +26,11 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { queryClient, trpc } from "@/utils/trpc";
 import { useMutation } from "@tanstack/react-query";
+import { useCreateChapter } from "../../hooks/use-create-chapter";
 
 export const NewChapterModal = ({ courseId }: { courseId: string }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: createChapter, isPending } = useMutation(
-    trpc.chapter.create.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.course.getAdminSingleCourse.queryKey({
-            courseId,
-          }),
-        });
-      },
-    })
-  );
+  const { createChapter, isPending } = useCreateChapter();
   const form = useForm<ChapterSchemaType>({
     resolver: zodResolver(chapterSchema),
     defaultValues: {
@@ -58,12 +49,8 @@ export const NewChapterModal = ({ courseId }: { courseId: string }) => {
   const onSubmit = async (values: ChapterSchemaType) => {
     createChapter(values, {
       onSuccess: () => {
-        toast.success("Chapter created successfully");
         form.reset();
         setIsOpen(false);
-      },
-      onError: () => {
-        toast.error("Failed to create chapter");
       },
     });
   };

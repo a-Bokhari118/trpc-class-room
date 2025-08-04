@@ -26,6 +26,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { queryClient, trpc } from "@/utils/trpc";
 import { useMutation } from "@tanstack/react-query";
+import { useCreateLesson } from "../../hooks/use-create-lesson";
 
 export const NewLessonModal = ({
   courseId,
@@ -35,17 +36,7 @@ export const NewLessonModal = ({
   chapterId: string;
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const { mutate: createLesson, isPending } = useMutation(
-    trpc.lesson.create.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.course.getAdminSingleCourse.queryKey({
-            courseId,
-          }),
-        });
-      },
-    })
-  );
+  const { createLesson, isPending } = useCreateLesson();
   const form = useForm<LessonSchemaType>({
     resolver: zodResolver(lessonSchema),
     defaultValues: {
@@ -68,12 +59,8 @@ export const NewLessonModal = ({
   const onSubmit = async (values: LessonSchemaType) => {
     createLesson(values, {
       onSuccess: () => {
-        toast.success("Lesson created successfully");
         form.reset();
         setIsOpen(false);
-      },
-      onError: () => {
-        toast.error("Failed to create lesson");
       },
     });
   };

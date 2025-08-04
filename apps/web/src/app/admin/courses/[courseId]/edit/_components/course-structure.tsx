@@ -43,6 +43,8 @@ import { DeleteLesson } from "./delete-lesson";
 import { DeleteChapter } from "./delete-chapter";
 import { queryClient, trpc } from "@/utils/trpc";
 import { useMutation } from "@tanstack/react-query";
+import { useReorderChapter } from "../../hooks/use-reorder-chapter";
+import { useReorderLesson } from "../../hooks/use-reorder-lesson";
 
 type SortableItemType = {
   id: string;
@@ -64,34 +66,10 @@ export const CourseStructure = ({
   const [reorderingChapterId, setReorderingChapterId] = useState<string | null>(
     null
   );
-  const { mutate: reorderChapters } = useMutation(
-    trpc.chapter.reorderChapters.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.course.getAdminSingleCourse.queryKey({
-            courseId: data.id,
-          }),
-        });
-      },
-      onSettled: () => {
-        setReorderingChapterId(null);
-      },
-    })
-  );
-  const { mutate: reorderLessons } = useMutation(
-    trpc.lesson.reorderLessons.mutationOptions({
-      onSuccess: () => {
-        queryClient.invalidateQueries({
-          queryKey: trpc.course.getAdminSingleCourse.queryKey({
-            courseId: data.id,
-          }),
-        });
-      },
-      onSettled: () => {
-        setReorderingLessonId(null);
-      },
-    })
-  );
+
+  const { reorderChapter, isReordering } = useReorderChapter();
+  const { reorderLesson, isReordering: isReorderingLesson } =
+    useReorderLesson();
 
   const initialItems =
     data.chapters.map((chapter) => ({
@@ -200,15 +178,14 @@ export const CourseStructure = ({
           id: chapter.id,
           position: chapter.order,
         }));
-        reorderChapters(
+        reorderChapter(
           { courseId, chapters: chaptersToUpdate },
           {
-            onSuccess: () => {
-              toast.success("Chapters reordered successfully");
-            },
             onError: () => {
-              toast.error("Failed to reorder chapters");
               setItems(prevItems);
+            },
+            onSettled: () => {
+              setReorderingChapterId(null);
             },
           }
         );
@@ -268,19 +245,18 @@ export const CourseStructure = ({
           position: lesson.order,
         }));
 
-        reorderLessons(
+        reorderLesson(
           {
             courseId,
             lessons: lessonsToUpdate,
             chapterId,
           },
           {
-            onSuccess: () => {
-              toast.success("Lessons reordered successfully");
-            },
             onError: () => {
-              toast.error("Failed to reorder lessons");
               setItems(prevItems);
+            },
+            onSettled: () => {
+              setReorderingLessonId(null);
             },
           }
         );
